@@ -27,7 +27,8 @@ h1 {
 }
 
 button,
-input {
+input,
+select {
   font-size: inherit;
   font-family: inherit;
   text-align: center;
@@ -48,8 +49,20 @@ input {
 
 main {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
+  @media (max-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
   .movie-card {
     display: grid;
     place-items: center;
@@ -73,9 +86,10 @@ main {
   .description {
     display: flex;
     gap: 5rem;
-    .original-lang {
+    .langPop {
       background-color: rgb(0, 0, 0);
-      width: 35px;
+      padding: 0.1rem;
+      width: fit-content;
       border: 1px solid burlywood;
       border-radius: 5px;
     }

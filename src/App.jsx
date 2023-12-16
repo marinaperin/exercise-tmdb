@@ -34,9 +34,9 @@ import MovieCard from "./components/MovieCard";
 const apiKey = import.meta.env.VITE_API_KEY;
 
 function App() {
-  const [movies, setMovies] = useState([]);
-  const [value, setValue] = useState("");
+  const [results, setResults] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [searchSelValue, setSearchSelValue] = useState("movie");
   const [error, setError] = useState(false);
 
   const query = new URLSearchParams({
@@ -46,39 +46,53 @@ function App() {
   });
 
   useEffect(() => {
-    fetch(`https://api.themoviedb.org/3/search/movie?${query}`)
+    fetch(
+      `https://api.themoviedb.org/3/search/${searchSelValue}?${query.toString()}`
+    )
       .then((response) => response.json())
-      .then((obj) => setMovies(obj.results))
+      .then((obj) => setResults(obj.results))
       .catch((err) => {
         console.error(err);
         setError(true);
       });
-  }, [searchValue]);
+  }, [searchValue, searchSelValue]);
 
   return (
     <>
       {error && <p>There was an error, try again</p>}
-      {!error && movies && (
+      {!error && results && (
         <>
           <h1>Search Movie</h1>
           <SearchBar
-            onSearch={(value) => {
-              setSearchValue(value);
-              setValue("");
+            onSearch={(inputValue, selectValue) => {
+              setSearchValue(inputValue);
+              setSearchSelValue(selectValue);
             }}
-            value={value}
-            onChange={(newValue) => setValue(newValue)}
           />
           <main>
-            {movies.map((movie) => {
+            {results.map((result) => {
               return (
-                <div key={movie.id}>
+                <div key={result.id}>
                   <MovieCard
-                    title={movie.title}
-                    overview={movie.overview}
-                    img={movie.poster_path}
-                    release={movie.release_date}
-                    originalLanguage={movie.original_language}
+                    title={result.title ? result.title : result.name}
+                    overview={result.overview}
+                    works={result.known_for}
+                    img={
+                      result.poster_path
+                        ? result.poster_path
+                        : result.profile_path
+                    }
+                    release={
+                      result.release_date
+                        ? result.release_date
+                        : result.first_air_date
+                    }
+                    department={result.known_for_department}
+                    languageOrPopularity={
+                      result.original_language
+                        ? result.original_language
+                        : result.popularity
+                    }
                   />
                 </div>
               );
