@@ -19,7 +19,14 @@ export default function ({
         <p>{release ? release : department}</p>
       </div>
       <figure>
-        <img src={`https://image.tmdb.org/t/p/w500${img}`} alt={title} />
+        <img
+          src={
+            img === null || img === undefined
+              ? "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
+              : `https://image.tmdb.org/t/p/w500${img}`
+          }
+          alt={title}
+        />
       </figure>
       {works ? (
         <ul className="overview">
